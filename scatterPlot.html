@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Visualization</title>
+    <style>
+        body {
+            font: 14px sans-serif;
+            fill: black;
+            text-align: center; /* Center align the content in the body */
+            background-color: aliceblue;
+        }
+
+        #chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Set the height to full viewport height */
+        }
+
+        .axis path, .axis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            fill: black;
+        }
+
+        .dot {
+            stroke: black;
+        }
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 200px;
+            height: 80px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+            fill: rgb(255, 255, 255);
+        }
+    </style>
+</head>
+<body>
+<div id="chart-container">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+        var margin = { top: 80, right: 20, bottom: 30, left: 80 },
+            width = 900 - margin.left - margin.right,
+            height = 550 - margin.top - margin.bottom;
+
+        var x = d3.scaleLinear().range([0, width]);
+        var y = d3.scaleLinear().range([height, 0]);
+        var r = d3.scaleSqrt().range([60, 120]);
+
+        var xAxis = d3.axisBottom().scale(x);
+        var yAxis = d3.axisLeft().scale(y);
+
+        var color = d3.scaleOrdinal(d3.schemeCategory20);
+        var symbols = d3.scaleOrdinal(d3.symbols);
+        var symbol = d3.symbol().size(100);
+
+        var svg = d3
+            .select("#chart-container")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr(
+                "transform",
+                "translate(" + margin.left + "," + margin.top + ")"
+            )
+            .style("display", "block")
+            .style("margin", "auto");
+
+        var tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+
+
+        d3.csv('satellites.csv', function(error, data){
+            data.forEach(function(d){
+                d.Apogee = +d.Apogee;
+                d.Perigee  = +d.Perigee;
+                d.Age = +d.Age;
+            });
+
+            x.domain(d3.extent(data, function(d){
+                return d.Perigee;
+            })).nice();
+
+            y.domain(d3.extent(data, function(d){
+                return d.Apogee;
+            })).nice();
+
+            r.domain(d3.extent(data, function(d){
+                return d.Age;
+            })).nice();
+
+            svg.append('g')
+                .attr('transform', 'translate(0,' + height + ')')
+                .attr('class', 'x axis')
+                .call(xAxis);
+
+            svg.append('g')
+                .attr('transform', 'translate(0,0)')
+                .attr('class', 'y axis')
+                .call(yAxis);
+
+            svg.append('text')
+                .attr('x', 10)
+                .attr('y', height - 450)
+                .attr('class', 'label')
+                .text('Apogee (In km)');
+
+            svg.append('text')
+                .attr('x', width)
+                .attr('y', height - 10)
+                .attr('text-anchor', 'end')
+                .attr('class', 'label')
+                .text('Perigee (In km)');
+
+            // we use the ordinal scale symbols to generate symbols
+            // such as d3.symbolCross, etc..
+            // -> symbol.type(d3.symbolCross)()
+            svg.selectAll(".symbol")
+                .data(data)
+                .enter().append("path")
+                .attr("class", "symbol")
+                .attr("d", function(d, i) { return symbol.type(symbols(d.Purpose))(); })
+                .style("fill", function(d) { return color(d.Purpose); })
+                .attr("transform", function(d) {
+                    return "translate(" + x(d.Perigee) + "," + y(d.Apogee) +")";
+                })
+                .on("mouseover", function(d) {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip .html("Satellite: "  + d.SatelliteName + "<br/>" + "Apogee: " + d.Apogee + ", Perigee: " + d.Perigee)
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
+                })
+                .on("mouseout", function(d) {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0)  ;
+                });
+
+            var clicked = ""
+
+            var legend = svg.selectAll(".legend")
+                .data(color.domain())
+                .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+            legend.append("path")
+                .style("fill", function(d) { return color(d); })
+                .attr("d", function(d, i) { return symbol.type(symbols(d))(); })
+                .attr("transform", function(d, i) {
+                    return "translate(" + (width - 10) + "," + 10 + ")";
+                })
+                .on("click",function(d){
+                    d3.selectAll(".symbol").style("opacity",1)
+
+                    if (clicked !== d){
+                        d3.selectAll(".symbol")
+                            .filter(function(e){
+                                return e.Purpose !== d;
+                            })
+                            .style("opacity",0.1)
+                        clicked = d
+                    }
+                    else{
+                        clicked = ""
+                    }
+                });
+
+            legend.append("text")
+                .attr("x", width - 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function(d) { return d; });
+
+        });
+
+
+    </script>
+</div>
+<div style="text-align: center; margin-top: 20px; font-size: 20px; font-weight: bold;color: #0d99a5">
+    FUNCTIONALITIES
+</div>
+</body>
+</html>

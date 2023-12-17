@@ -2,13 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Satellites Orbiting the Earth</title>
+    <title>Every Satellite Orbiting the Earth</title>
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="../reveal.css">
-		<link rel="stylesheet" href="../theme/league.css" id="theme">
-		<link rel="stylesheet" href="../reset.css">
-    <link rel="stylesheet" href="../bubble_chart.css">
+    <link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+		<link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/bubble_chart.css">
     <link rel="stylesheet" href="stackedBarChart.css">
     <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
   </head>
@@ -18,40 +18,49 @@
       <div class="slides">
         <section id="Index">
             <h3>Every Satellite Orbiting the Earth</h3>
-
-        </section>
-
-
-        </section>
-        <section id="StackedChart">
-            <h4>Satellite Age in the Orbit</h4>
-            <iframe src="../../stacked.html" name="targetframe" allowTransparency="true" scrollbar="yes" frameborder="0" height="700" width="1300" >
-            </iframe>
-        </section> 
-
-        </section>
-        <section id="SatellitesByTypes">
-          <h4>What are these satellites used for and type of orbits</h4>
-            <iframe src="../../satellite_purpose.html" name="targetframe" allowTransparency="true" frameborder="0" height="800" width="1100"></iframe>
-            <h7>This is some description about above plot</h7>
-        </section>
-
-        </section>
-       <section id="ApogeePerigee">
-          <h4>Satellites Apogee Vs Perigee</h4>
-          <iframe src="../../scatterPlot.html" name="targetframe" allowTransparency="true" scrollbar="yes" frameborder="0" height="700" width="1300"></iframe>
-       </section>
-
-        </section>
-
+            <p><small>ADARSH KARNE</p>
+            <p><small>SHEKAR RAJAMANDRAPU</small></p>
         </section>
         
         </section>
+       
+        </section>
+        <section id="StackedChart">
+            <h4>Satellite Age in the Orbit</h4>
+            <iframe src="stacked.html" name="targetframe" allowTransparency="true" scrollbar="yes" frameborder="0" height="700" width="1300" > 
+            </iframe>
+        </section> 
+        
+        </section> 
+        <section id="SatellitesByTypes">
+          <h4>What are these satellites used for</h4>
+            <iframe src="satellite_purpose.html" name="targetframe" allowTransparency="true" frameborder="0" height="800" width="1100"></iframe>
+            <h7>This is some description about above plot</h7>
+        </section>
+        
+        </section>
+       <section id="ApogeePerigee">
+          <h4>Satellites Apogee Vs Perigee</h4>
+          <iframe src="scatterPlot.html" name="targetframe" allowTransparency="true" scrollbar="yes" frameborder="0" height="700" width="1300"></iframe>
+       </section>
+        
+        </section>  
+        <section id="Conclusion">
+            <h4>So what happened in last 4-5 decades...</h4>
+            <p><iframe class="juxtapose" src="https://cdn.knightlab.com/libs/juxtapose/latest/embed/index.html?uid=03d44e24-e16f-11e5-a524-0e7075bba956" frameborder="0" width="650" height="380"></iframe></p>
+            <p><small>In the above image, we can see that since the first satellite was launched back in 60's there were only few countries that had satellites let alone the capabilities of launcing 
+              the satellite with space launch. User can slide the bar to left or right to compare world between 1966 and 2016. In last 4 decades we have seen tremendous growth not only in number of satellies launched by several coutries but also in what purpose 
+              these satellites are used for. As of 2016, countries from virtually every continent have their satellite orbiting the earth. We also see the increase in coutries who have
+              space launching capabilities as well.
+            </small></p>
+        </section>
+        
+        </section>  
       </div>
     </div>
 
-    <script src="../../lib/js/head.min.js"></script>
-    <script src="../../js/reveal.js"></script>
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
     
     <script>
 
@@ -86,6 +95,6 @@
     <script src="https://d3js.org/topojson.v2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
     <script src="stackedBarChart.js"></script>
-    <script src="../../tooltip.js"></script>
+    <script src="tooltip.js"></script>
   </body>
 </html>
